@@ -1,0 +1,91 @@
+var pieChart = echarts.init(document.getElementById('pie-chart'));
+var lineChart = echarts.init(document.getElementById('line-chart'));
+
+var pieData = [
+    {value: 335, name: '模块1'},
+    {value: 310, name: '模块2'},
+    {value: 234, name: '模块3'},
+    {value: 135, name: '模块4'},
+    {value: 1548, name: '模块5'}
+];
+
+var lineData = [
+    {month: '1月', total: 820},
+    {month: '2月', total: 932},
+    {month: '3月', total: 901},
+    {month: '4月', total: 934},
+    {month: '5月', total: 1290},
+    {month: '6月', total: 1330},
+    {month: '7月', total: 1320}
+];
+
+var pieOption = {
+    title: {
+        text: '模块资金分布',
+        subtext: '示例',
+        left: 'center'
+    },
+    series: [
+        {
+            name: '金额',
+            type: 'pie',
+            radius: '50%',
+            data: pieData
+        }
+    ]
+};
+
+var lineOption = {
+    title: {
+        text: '月份总金额变化',
+        left: 'center'
+    },
+    xAxis: {
+        type: 'category',
+        data: lineData.map(data => data.month)
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [{
+        data: lineData.map(data => data.total),
+        type: 'line',
+        smooth: true
+    }]
+};
+
+pieChart.setOption(pieOption);
+lineChart.setOption(lineOption);
+
+function selectMonth(month) {
+    var data = getDataForMonth(month);
+
+    pieOption.series[0].data = data.pieData;
+    lineOption.series[0].data = data.lineData.map(data => data.total);
+    lineOption.xAxis.data = data.lineData.map(data => data.month);
+
+    pieChart.setOption(pieOption);
+    lineChart.setOption(lineOption);
+}
+
+// 模拟函数，你需要用实际的API替换这个函数
+function getDataForMonth(month) {
+    return {
+        pieData: [
+            {value: Math.random() * 1000, name: '模块1'},
+            {value: Math.random() * 1000, name: '模块2'},
+            {value: Math.random() * 1000, name: '模块3'},
+            {value: Math.random() * 1000, name: '模块4'},
+            {value: Math.random() * 1000, name: '模块5'}
+        ],
+        lineData: [
+            {month: '1月', total: Math.random() * 1000},
+            {month: '2月', total: Math.random() * 1000},
+            {month: '3月', total: Math.random() * 1000},
+            {month: '4月', total: Math.random() * 1000},
+            {month: '5月', total: Math.random() * 1000},
+            {month: '6月', total: Math.random() * 1000},
+            {month: '7月', total: Math.random() * 1000}
+        ]
+    };
+}
