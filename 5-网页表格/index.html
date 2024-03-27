@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
+</head>
+
+<body>
+    <div id="hot"></div>
+    <button id="exportBtn">复制到粘贴板</button>
+    <button id="convertBtn">大小写转换</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var data = [
+                ['Alice', 25, 'Engineer'],
+                ['Bob', 32, 'Designer'],
+                ['Charlie', 45, 'Manager']
+            ];
+
+            var container = document.getElementById('hot');
+            var hot = new Handsontable(container, {
+                data: data,
+                colHeaders: ['Name', 'Age', 'Occupation'],
+                rowHeaders: true,
+                licenseKey: 'non-commercial-and-evaluation' // for non-commercial use only
+            });
+
+            // 复制的时候，你可以基于表格的内容做一些事情，这样就可以做一个小工具。例如文件转换，表格内容变化等等
+            // 像是一些基本的批量计算能力，也可以基于这个UI去做
+            var exportBtn = document.getElementById('exportBtn');
+            exportBtn.addEventListener('click', function () {
+                console.log(data);
+
+                var textToCopy = data.map(row => row.join('\t')).join('\n');
+                navigator.clipboard.writeText(textToCopy)
+                    .then(function () {
+                        console.log('Data copied to clipboard');
+                    })
+                    .catch(function (error) {
+                        console.error('Copy failed:', error);
+                    });
+            });
+
+            var convertBtn = document.getElementById('convertBtn');
+            convertBtn.addEventListener('click', function () {
+                for (var i = 0; i < data.length; i++) {
+                    for (var j = 0; j < data[i].length; j++) {
+                        if (typeof data[i][j] === 'string') {
+                            if (data[i][j] === data[i][j].toUpperCase()) {
+                                data[i][j] = data[i][j].toLowerCase();
+                            } else {
+                                data[i][j] = data[i][j].toUpperCase();
+                            }
+                        }
+                    }
+                }
+
+                hot.loadData(data);
+            });
+        });
+    </script>
+</body>
+
+</html>
